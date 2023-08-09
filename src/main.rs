@@ -1,8 +1,7 @@
-
-use aws_sdk_cloudwatch::Client;
+use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_cloudwatch::primitives::DateTime;
 use aws_sdk_cloudwatch::types::{Metric, MetricDataQuery, MetricStat};
-use aws_config::meta::region::RegionProviderChain;
+use aws_sdk_cloudwatch::Client;
 use chrono::{Duration, DurationRound, Utc};
 use tokio_stream::StreamExt;
 
@@ -13,16 +12,16 @@ async fn main() {
     let client = Client::new(&config);
 
     let end_time = Utc::now()
-    .duration_trunc(Duration::hours(1))
-    .unwrap()
-    .timestamp() as u64;
+        .duration_trunc(Duration::hours(1))
+        .unwrap()
+        .timestamp() as u64;
 
     let start_time = end_time - 3600;
 
     let metric = Metric::builder()
         .namespace("AWS/Usage".to_string())
         .metric_name("ConcurrentExecutions".to_string())
-        .set_dimensions(Some(Vec::new()))
+        .set_dimensions(None)
         .build();
 
     let metric_stat = MetricStat::builder()
@@ -33,13 +32,13 @@ async fn main() {
 
     let usage_data = MetricDataQuery::builder()
         .metric_stat(metric_stat)
-        .id("usage_data")
+        .id("e1")
         .return_data(false)
         .build();
 
     let percentage_usage_data = MetricDataQuery::builder()
-        .expression("(usage_data/SERVICE_QUOTA(usage_data))*100")
-        .id("utilization")
+        .expression("SERVICE_QUOTA(e1)")
+        .id("e2")
         .return_data(true)
         .build();
 
