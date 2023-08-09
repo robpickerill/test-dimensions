@@ -8,7 +8,7 @@ response = client.get_metric_data(
             'Id': 'e1',
             'MetricStat': {
                 'Metric': {
-                    'Namespace': 'AWS/Usage',
+                    'Namespace': 'AWS/Lambda',
                     'MetricName': 'ConcurrentExecutions',
                 },
                 'Period': 60,

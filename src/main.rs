@@ -19,7 +19,7 @@ async fn main() {
     let start_time = end_time - 3600;
 
     let metric = Metric::builder()
-        .namespace("AWS/Usage".to_string())
+        .namespace("AWS/Lambda".to_string())
         .metric_name("ConcurrentExecutions".to_string())
         .set_dimensions(None)
         .build();
